@@ -10,6 +10,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class CreateTripHandler implements RequestHandler<HandlerRequest, HandlerResponse> {
 
@@ -27,6 +28,19 @@ public class CreateTripHandler implements RequestHandler<HandlerRequest, Handler
         context.getLogger().log("Creating a new trip record");
         final Trip savedTrip = repository.save(trip);
 
-        return HandlerResponse.builder().setStatusCode(201).setObjectBody(new CreateTripResponse(savedTrip.getId(), "TODO")).build();
+        return HandlerResponse.builder().setStatusCode(201).setObjectBody(new CreateTripResponse(savedTrip.getId(), createBucketName(trip))).build();
     }
+
+    private String createBucketName(Trip trip) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(trip.getCountry());
+        sb.append("-");
+        sb.append(trip.getCity());
+        sb.append("-");
+        sb.append(trip.getDate());
+        sb.append("-");
+        sb.append(new Random().ints(6, 0, 9).limit(6).collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString());
+        return sb.toString();
+    }
+
 }
