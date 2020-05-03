@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'serverless-trip
+
+  Rest API to manage trip data
+
+  '
+Globals:
+  Function:
+    MemorySize: 512
+    Timeout: 20
+Outputs:
+  CreateTripFunction:
+    Description: CreateTrip Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - CreateTripFunction
+      - Arn
+  GetTripsByPeriodFunction:
+    Description: GetTripsByPeriod Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - GetTripsByPeriodFunction
+      - Arn
+  GetTripByIdFunction:
+    Description: GetTripById Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - GetTripsByIdFunction
+      - Arn
+Resources:
+  CreateStudyRecordFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        CreateStudyRecord:
+          Properties:
+            Method: post
+            Path: /trips
+          Type: Api
+      Handler: br.com.fiap.serverless.handler.CreateTripHandler::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+  GetTripsByPeriodFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        GetTripsByPeriod:
+          Properties:
+            Method: get
+            Path: /trips
+            RequestParameters:
+            - method.request.querystring.start
+            - method.request.querystring.end
+          Type: Api
+      Handler: br.com.fiap.serverless.handler.GetTripsByPeriodHandler::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+  GetTripByIdFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        GetTripsById:
+          Properties:
+            Method: get
+            Path: /study/{id}
+            RequestParameters:
+            - method.request.querystring.tag
+          Type: Api
+      Handler: br.com.fiap.serverless.handler.GetTripByIdHandler::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
