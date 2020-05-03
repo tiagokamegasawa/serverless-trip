@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    serverless-trip
+
+    Rest API to manage trip data
+
+Globals:
+    Function:
+        Timeout: 20
+        MemorySize: 512
+        Environment:
+          Variables:
+            TABLE_NAME: !Ref Trip
+            ENDPOINT_OVERRIDE: ""
+
+Resources:
+
+  CreateTripFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/serverless-trip-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.fiap.serverless.handler.CreateTripHandler::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref Trip
+     Events:
+       CreateTrip:
+         Type: Api
+         Properties:
+           Path: /trips
+           Method: post
+           
+  GetTripsByPeriodFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/serverless-trip-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.fiap.serverless.handler.GetTripsByPeriodHandler::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref Trip
+     Events:
+       GetTripsByPeriod:
+         Type: Api
+         Properties:
+           Path: /trips
+           Method: get
+           RequestParameters:
+              - method.request.querystring.start
+              - method.request.querystring.end
+              
+  GetTripByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/serverless-trip-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.fiap.serverless.handler.GetTripByIdHandler::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref Trip
+     Events:
+       GetTripById:
+         Type: Api
+         Properties:
+           Path: /trips/{id}
+           Method: get
+
+  Trip:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: trip
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: I
+        - AttributeName: date
+          AttributeType: S
+        - AttributeName: country
+          AttributeType: S
+        - AttributeName: city
+          AttributeType: S
+        - AttributeName: photosUrl
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: date
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+
+Outputs:
+
+    CreateTripFunction:
+      Description: "CreateTrip Lambda Function ARN"
+      Value: !GetAtt CreateTripFunction.Arn
+      
+    GetTripsByPeriodFunction:
+      Description: "GetTripsByPeriod Lambda Function ARN"
+      Value: !GetAtt GetTripsByPeriodFunction.Arn
+      
+    GetTripByIdFunction:
+      Description: "GetTripById Lambda Function ARN"
+      Value: !GetAtt GetTripByIdFunction.Arn
