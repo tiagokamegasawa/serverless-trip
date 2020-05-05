@@ -19,7 +19,7 @@ Resources:
   CreateTripFunction:
     Type: AWS::Serverless::Function
     Properties:
-     CodeUri: target/serverless-trip-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     CodeUri: build/libs/serverless-trip-all-0.0.1-SNAPSHOT.jar
      Handler: br.com.fiap.serverless.handler.CreateTripHandler::handleRequest
      Runtime: java8
      Policies:
@@ -35,7 +35,7 @@ Resources:
   GetTripsByPeriodFunction:
     Type: AWS::Serverless::Function
     Properties:
-     CodeUri: target/serverless-trip-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     CodeUri: build/libs/serverless-trip-all-0.0.1-SNAPSHOT.jar
      Handler: br.com.fiap.serverless.handler.GetTripsByPeriodHandler::handleRequest
      Runtime: java8
      Policies:
@@ -54,7 +54,7 @@ Resources:
   GetTripByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
-     CodeUri: target/serverless-trip-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     CodeUri: build/libs/serverless-trip-all-0.0.1-SNAPSHOT.jar
      Handler: br.com.fiap.serverless.handler.GetTripByIdHandler::handleRequest
      Runtime: java8
      Policies:
@@ -73,14 +73,8 @@ Resources:
       TableName: trip
       AttributeDefinitions:
         - AttributeName: id
-          AttributeType: I
+          AttributeType: N
         - AttributeName: date
-          AttributeType: S
-        - AttributeName: country
-          AttributeType: S
-        - AttributeName: city
-          AttributeType: S
-        - AttributeName: photosUrl
           AttributeType: S
       KeySchema:
         - AttributeName: id

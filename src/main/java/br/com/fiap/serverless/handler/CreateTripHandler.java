@@ -8,6 +8,8 @@ import br.com.fiap.serverless.repository.TripRepository;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.util.Random;
@@ -16,6 +18,8 @@ public class CreateTripHandler implements RequestHandler<HandlerRequest, Handler
 
     private final TripRepository repository = new TripRepository();
 
+    private final Log logger = LogFactory.getLog(CreateTripHandler.class);
+
     @Override
     public HandlerResponse handleRequest(final HandlerRequest request, final Context context) {
 
@@ -23,9 +27,10 @@ public class CreateTripHandler implements RequestHandler<HandlerRequest, Handler
         try {
             trip = new ObjectMapper().readValue(request.getBody(), Trip.class);
         } catch (IOException e) {
-            return HandlerResponse.builder().setStatusCode(400).setRawBody("There is a error in your Trip!").build();
+            logger.error(e);
+            return HandlerResponse.builder().setStatusCode(400).setRawBody("Erro ao criar um registro de Trip").build();
         }
-        context.getLogger().log("Creating a new trip record");
+        context.getLogger().log("Criando um novo registro");
         final Trip savedTrip = repository.save(trip);
 
         return HandlerResponse.builder().setStatusCode(201).setObjectBody(new CreateTripResponse(savedTrip.getId(), createBucketName(trip))).build();

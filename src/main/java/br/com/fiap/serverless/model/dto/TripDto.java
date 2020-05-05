@@ -2,13 +2,11 @@ package br.com.fiap.serverless.model.dto;
 
 import br.com.fiap.serverless.model.Trip;
 
-import java.time.LocalDate;
-
 public class TripDto {
 
     private final Integer id;
 
-    private final LocalDate date;
+    private final String date;
 
     private final String country;
 
@@ -28,7 +26,7 @@ public class TripDto {
         return id;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 

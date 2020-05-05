@@ -5,8 +5,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-import java.time.LocalDate;
-
 @DynamoDBTable(tableName = "trip")
 public class Trip {
 
@@ -14,7 +12,7 @@ public class Trip {
     private Integer id;
 
     @DynamoDBRangeKey(attributeName = "date")
-    private LocalDate date;
+    private String date;
 
     @DynamoDBAttribute(attributeName = "country")
     private String country;
@@ -29,7 +27,7 @@ public class Trip {
     }
 
     public Trip(Integer id,
-                LocalDate date,
+                String date,
                 String country,
                 String city,
                 String photosUrl) {
@@ -48,11 +46,11 @@ public class Trip {
         this.id = id;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
