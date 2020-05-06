@@ -51,6 +51,7 @@ Resources:
             RequestParameters:
             - method.request.querystring.start
             - method.request.querystring.end
+            - method.request.querystring.country
           Type: Api
       Handler: br.com.fiap.serverless.handler.GetTripsByPeriodHandler::handleRequest
       Runtime: java8

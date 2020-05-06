@@ -1,20 +1,17 @@
 package br.com.fiap.serverless.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 @DynamoDBTable(tableName = "trip")
 public class Trip {
 
     @DynamoDBHashKey(attributeName = "id")
-    private Integer id;
+    private String id;
 
-    @DynamoDBRangeKey(attributeName = "date")
+    @DynamoDBIndexRangeKey(attributeName = "date", globalSecondaryIndexName = "dateIndex")
     private String date;
 
-    @DynamoDBAttribute(attributeName = "country")
+    @DynamoDBIndexHashKey(attributeName = "country", globalSecondaryIndexName = "dateIndex")
     private String country;
 
     @DynamoDBAttribute(attributeName = "city")
@@ -26,7 +23,7 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(Integer id,
+    public Trip(String id,
                 String date,
                 String country,
                 String city,
@@ -38,11 +35,11 @@ public class Trip {
         this.photosUrl = photosUrl;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

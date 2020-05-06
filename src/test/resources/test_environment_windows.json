@@ -1,14 +1,17 @@
 {
 	"CreateTripFunction": {
 		"ENDPOINT_OVERRIDE": "http://docker.for.windows.localhost:8000",
-		"TABLE_NAME": "trip"
+		"TABLE_NAME": "trip",
+		"AWS_REGION": "local"
 	},
 	"GetTripsByPeriodFunction": {
 		"ENDPOINT_OVERRIDE": "http://docker.for.windows.localhost:8000",
-		"TABLE_NAME": "trip"
+		"TABLE_NAME": "trip",
+		"AWS_REGION": "local"
 	},
 	"GetTripByIdFunction": {
 		"ENDPOINT_OVERRIDE": "http://docker.for.windows.localhost:8000",
-		"TABLE_NAME": "trip"
+		"TABLE_NAME": "trip",
+		"AWS_REGION": "local"
 	}
 }

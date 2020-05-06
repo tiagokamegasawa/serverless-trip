@@ -13,10 +13,10 @@ public class DynamoDBManager {
 		
 		AmazonDynamoDB ddb = null;
 		final String endpoint = System.getenv("ENDPOINT_OVERRIDE");
-		final String signingRegion = System.getenv("REGION");
+		final String signingRegion = System.getenv("AWS_REGION");
 
         if (endpoint != null && !endpoint.isEmpty()) {
-        	EndpointConfiguration endpointConfiguration = new EndpointConfiguration(endpoint, "local");
+        	EndpointConfiguration endpointConfiguration = new EndpointConfiguration(endpoint, signingRegion);
         	ddb = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(endpointConfiguration).build();
         } else {
         	ddb = AmazonDynamoDBClientBuilder.defaultClient();

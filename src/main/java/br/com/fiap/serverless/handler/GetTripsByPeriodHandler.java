@@ -19,8 +19,9 @@ public class GetTripsByPeriodHandler implements RequestHandler<HandlerRequest, H
 
         final String start = request.getQueryStringParameters().get("start");
         final String end = request.getQueryStringParameters().get("end");
+        final String country = request.getQueryStringParameters().get("country");
 
-        final List<Trip> trips = this.repository.findByPeriod(start, end);
+        final List<Trip> trips = this.repository.findByPeriod(start, end, country);
 
         if (trips == null || trips.isEmpty()) {
             return HandlerResponse.builder().setStatusCode(200).setObjectBody(Collections.emptyList()).build();

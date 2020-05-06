@@ -24,7 +24,8 @@ docker run -p 8000:8000 -v $(pwd)/local/dynamodb:/data/ amazon/dynamodb-local -j
 
 * Crie a tabela no DynamoDB: 
 ```bash
-aws dynamodb create-table --table-name trip --attribute-definitions AttributeName=id,AttributeType=N AttributeName=date,AttributeType=S --key-schema AttributeName=id,KeyType=HASH AttributeName=date,KeyType=RANGE --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000
+aws dynamodb create-table --table-name trip --attribute-definitions AttributeName=id,AttributeType=S AttributeName=date,AttributeType=S AttributeName=country,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --global-secondary-indexes 'IndexName=dateIndex,KeySchema=[{AttributeName=country,KeyType=HASH}, {AttributeName=date,KeyType=RANGE}],Projection={ProjectionType=ALL}' --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000
+
 ```
 Caso a tabela já esteja criada, ela pode ser removida utilizando o comando: 
 ```bash
@@ -36,3 +37,5 @@ aws dynamodb delete-table --table-name trip --endpoint-url http://localhost:8000
 ```bash
 sam local start-api --env-vars src/test/resources/test_environment_<nome_do_so>.json
 ```
+* Obs: Em ambiente linux, se houver um erro de "Connection Refused" ao acessar uma das APIs, pode ser que seja necessário substituir a URL na variável ENDPOINT_OVERRIDE presente no arquivo
+pelo IP do container docker em que o DynamoDB está. Para obter o IP utilize o comando `ifconfig` no terminal. 

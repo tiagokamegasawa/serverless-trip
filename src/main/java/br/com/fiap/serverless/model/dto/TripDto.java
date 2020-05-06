@@ -4,7 +4,7 @@ import br.com.fiap.serverless.model.Trip;
 
 public class TripDto {
 
-    private final Integer id;
+    private final String id;
 
     private final String date;
 
@@ -22,7 +22,7 @@ public class TripDto {
         this.photosUrl = trip.getPhotosUrl();
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 

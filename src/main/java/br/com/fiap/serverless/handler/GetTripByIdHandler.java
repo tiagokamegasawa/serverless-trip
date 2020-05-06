@@ -16,7 +16,7 @@ public class GetTripByIdHandler implements RequestHandler<HandlerRequest, Handle
 
         String id = request.getPathParameters().get("id");
 
-        Trip trip = this.repository.findById(Integer.valueOf(id));
+        Trip trip = this.repository.findById(id);
 
         if (trip == null) {
             return HandlerResponse.builder().setStatusCode(404).build();

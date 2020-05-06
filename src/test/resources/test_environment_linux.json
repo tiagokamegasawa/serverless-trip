@@ -1,14 +1,17 @@
 {
 	"CreateTripFunction": {
-		"ENDPOINT_OVERRIDE": "http://localhost:8000/",
-		"TABLE_NAME": "trip"
+		"ENDPOINT_OVERRIDE": "http://127.0.0.1:8000/",
+		"TABLE_NAME": "trip",
+		"AWS_REGION": "local"
 	},
 	"GetTripsByPeriodFunction": {
-		"ENDPOINT_OVERRIDE": "http://localhost:8000/",
-		"TABLE_NAME": "trip"
+		"ENDPOINT_OVERRIDE": "http://127.0.0.1:8000/",
+		"TABLE_NAME": "trip",
+		"AWS_REGION": "local"
 	},
 	"GetTripByIdFunction": {
-		"ENDPOINT_OVERRIDE": "http://localhost:8000/",
-		"TABLE_NAME": "trip"
+		"ENDPOINT_OVERRIDE": "http://127.0.0.1:8000/",
+		"TABLE_NAME": "trip",
+		"AWS_REGION": "local"
 	}
 }

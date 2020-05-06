@@ -18,20 +18,26 @@ public class TripRepository {
 		return trip;
 	}
 
-	public List<Trip> findByPeriod(final String start, final String end) {
+	public List<Trip> findByPeriod(final String start, final String end, final String country) {
 
 		final Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
 		eav.put(":start", new AttributeValue().withS(start));
 		eav.put(":end", new AttributeValue().withS(end));
+		eav.put(":country", new AttributeValue().withS(country));
+
+		final Map<String, String> expression = new HashMap<>();
+
+		expression.put("#date", "date");
 
 		final DynamoDBQueryExpression<Trip> queryExpression = new DynamoDBQueryExpression<Trip>()
-				.withKeyConditionExpression("date between :start and :end")
-				.withExpressionAttributeValues(eav);
+				.withIndexName("dateIndex").withConsistentRead(false)
+				.withKeyConditionExpression("country = :country and #date between :start and :end").withExpressionAttributeValues(eav)
+				.withExpressionAttributeNames(expression);
 
 		return mapper.query(Trip.class, queryExpression);
 	}
 
-	public Trip findById(final Integer id) {
+	public Trip findById(final String id) {
 		return mapper.load(Trip.class, id);
 	}
 }

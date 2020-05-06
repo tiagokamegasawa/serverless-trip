@@ -11,8 +11,9 @@ Globals:
         MemorySize: 512
         Environment:
           Variables:
-            TABLE_NAME: !Ref Trip
+            TABLE_NAME: !Ref TripTable
             ENDPOINT_OVERRIDE: ""
+            AWS_REGION: "us-east-1"
 
 Resources:
 
@@ -40,7 +41,7 @@ Resources:
      Runtime: java8
      Policies:
        - DynamoDBCrudPolicy:
-           TableName: !Ref Trip
+           TableName: !Ref TripTable
      Events:
        GetTripsByPeriod:
          Type: Api
@@ -50,6 +51,7 @@ Resources:
            RequestParameters:
               - method.request.querystring.start
               - method.request.querystring.end
+              - method.request.querystring.country
               
   GetTripByIdFunction:
     Type: AWS::Serverless::Function
@@ -59,7 +61,7 @@ Resources:
      Runtime: java8
      Policies:
        - DynamoDBCrudPolicy:
-           TableName: !Ref Trip
+           TableName: !Ref TripTable
      Events:
        GetTripById:
          Type: Api
@@ -67,20 +69,29 @@ Resources:
            Path: /trips/{id}
            Method: get
 
-  Trip:
+  TripTable:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: trip
       AttributeDefinitions:
         - AttributeName: id
-          AttributeType: N
+          AttributeType: S
         - AttributeName: date
+          AttributeType: S
+        - AttributeName: country
           AttributeType: S
       KeySchema:
         - AttributeName: id
           KeyType: HASH
-        - AttributeName: date
-          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: dateIndex
+          KeySchema:
+            - AttributeName: country
+              KeyType: HASH
+            - AttributeName: date
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
       BillingMode: PAY_PER_REQUEST
 
 Outputs:
