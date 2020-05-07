@@ -31,14 +31,15 @@ public class CreateTripHandler implements RequestHandler<HandlerRequest, Handler
             return HandlerResponse.builder().setStatusCode(400).setRawBody("Erro ao criar um registro de Trip").build();
         }
         context.getLogger().log("Criando um novo registro");
-        trip.setPhotosUrl(createBucketName(trip));
+        trip.setPhotosUrl(createBucketUrl(trip));
         final Trip savedTrip = repository.save(trip);
 
         return HandlerResponse.builder().setStatusCode(201).setObjectBody(new CreateTripResponse(savedTrip.getId(), savedTrip.getPhotosUrl())).build();
     }
 
-    private String createBucketName(Trip trip) {
+    private String createBucketUrl(Trip trip) {
         StringBuilder sb = new StringBuilder();
+        sb.append("s3://");
         sb.append(trip.getCountry());
         sb.append("-");
         sb.append(trip.getCity());
