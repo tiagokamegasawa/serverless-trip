@@ -31,9 +31,10 @@ public class CreateTripHandler implements RequestHandler<HandlerRequest, Handler
             return HandlerResponse.builder().setStatusCode(400).setRawBody("Erro ao criar um registro de Trip").build();
         }
         context.getLogger().log("Criando um novo registro");
+        trip.setPhotosUrl(createBucketName(trip));
         final Trip savedTrip = repository.save(trip);
 
-        return HandlerResponse.builder().setStatusCode(201).setObjectBody(new CreateTripResponse(savedTrip.getId(), createBucketName(trip))).build();
+        return HandlerResponse.builder().setStatusCode(201).setObjectBody(new CreateTripResponse(savedTrip.getId(), savedTrip.getPhotosUrl())).build();
     }
 
     private String createBucketName(Trip trip) {
